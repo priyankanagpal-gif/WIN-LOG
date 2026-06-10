@@ -1,2 +1,0 @@
-# WIN-LOG
-Habbit Tracker
