@@ -31,10 +31,8 @@
     min-height: 100vh;
   }
 
-  /* Layout */
   .app { max-width: 680px; margin: 0 auto; padding: 0 20px 80px; }
 
-  /* Header */
   header {
     padding: 40px 0 28px;
     border-bottom: 1px solid var(--border);
@@ -64,9 +62,7 @@
     margin-top: 2px;
   }
 
-  .streak-badge {
-    text-align: right;
-  }
+  .streak-badge { text-align: right; }
 
   .streak-num {
     font-family: 'Playfair Display', serif;
@@ -84,7 +80,6 @@
     margin-top: 2px;
   }
 
-  /* Date navigator */
   .date-nav {
     display: flex;
     align-items: center;
@@ -107,10 +102,7 @@
   }
   .nav-btn:hover { color: var(--gold); }
 
-  .date-display {
-    flex: 1;
-    text-align: center;
-  }
+  .date-display { flex: 1; text-align: center; }
 
   .date-main {
     font-family: 'Playfair Display', serif;
@@ -141,7 +133,6 @@
   }
   .today-btn:hover { background: var(--gold-mid); color: white; }
 
-  /* Log entry form */
   .log-form {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -158,7 +149,6 @@
     display: block;
   }
 
-  /* Win type selector */
   .win-types {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -202,7 +192,6 @@
     color: var(--ink);
   }
 
-  /* Note input */
   .note-input {
     width: 100%;
     border: 1.5px solid var(--border);
@@ -220,7 +209,6 @@
   .note-input:focus { border-color: var(--gold-mid); }
   .note-input::placeholder { color: var(--ink-muted); }
 
-  /* Trigger selector */
   .triggers {
     display: flex;
     flex-wrap: wrap;
@@ -262,7 +250,6 @@
 
   .save-btn:hover { background: var(--gold); }
 
-  /* Day summary */
   .day-summary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -296,7 +283,6 @@
     margin-top: 4px;
   }
 
-  /* Entries list */
   .entries-header {
     font-size: 10px;
     letter-spacing: 3px;
@@ -341,7 +327,6 @@
   .entry-card.slip { border-left-color: var(--slip); }
 
   .entry-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-
   .entry-body { flex: 1; }
 
   .entry-type {
@@ -362,11 +347,7 @@
     margin-bottom: 4px;
   }
 
-  .entry-meta {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  .entry-meta { display: flex; gap: 8px; flex-wrap: wrap; }
 
   .entry-time {
     font-family: 'DM Mono', monospace;
@@ -394,7 +375,6 @@
   }
   .entry-delete:hover { color: var(--slip); }
 
-  /* Empty state */
   .empty-state {
     text-align: center;
     padding: 40px 20px;
@@ -405,7 +385,6 @@
   .empty-state .empty-icon { font-size: 32px; margin-bottom: 10px; }
   .empty-state p { font-size: 14px; line-height: 1.5; }
 
-  /* Toast */
   .toast {
     position: fixed;
     bottom: 24px;
@@ -422,14 +401,9 @@
     white-space: nowrap;
   }
 
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .toast.gold { background: var(--gold); }
 
-  /* Calendar strip */
   .cal-strip {
     display: flex;
     gap: 6px;
@@ -457,7 +431,6 @@
   .cal-day.today { border-color: var(--gold-mid); background: var(--gold-light); }
   .cal-day.selected { border-color: var(--ink); background: var(--ink); }
   .cal-day.selected .cal-d, .cal-day.selected .cal-wd { color: white; }
-
   .cal-day.has-wins { border-bottom: 2px solid var(--win); }
   .cal-day.has-slips { border-bottom: 2px solid var(--slip); }
   .cal-day.has-both { border-bottom: 2px solid var(--gold-mid); }
@@ -506,10 +479,8 @@
     </div>
   </header>
 
-  <!-- Calendar strip: last 14 days -->
   <div class="cal-strip" id="calStrip"></div>
 
-  <!-- Date Navigator -->
   <div class="date-nav">
     <button class="nav-btn" id="prevDay">&#8592;</button>
     <div class="date-display">
@@ -520,7 +491,6 @@
     <button class="nav-btn" id="nextDay">&#8594;</button>
   </div>
 
-  <!-- Day Summary -->
   <div class="day-summary">
     <div class="summary-card">
       <div class="summary-num wins" id="summaryWins">0</div>
@@ -536,10 +506,8 @@
     </div>
   </div>
 
-  <!-- Log Entry Form -->
   <div class="log-form">
     <label class="form-label">Log a moment</label>
-
     <div class="win-types">
       <button class="win-type-btn selected-win" data-type="win" id="btnWin">
         <span class="icon">💪</span> I resisted
@@ -570,9 +538,8 @@
     <button class="save-btn" id="saveBtn">Log This Moment</button>
   </div>
 
-  <!-- Entries -->
   <div class="entries-header">
-    <span>Today's Log</span>
+    <span id="entriesLabel">Today's Log</span>
     <button class="clear-day-btn" id="clearDayBtn">Clear day</button>
   </div>
   <div class="entries-list" id="entriesList"></div>
@@ -586,36 +553,39 @@
   let selectedDate = todayKey();
   let selectedType = 'win';
   let selectedTrigger = null;
-  let allData = {};   // { "2026-06-09": [{...}, ...] }
+  let allData = {};
 
-  // ── Storage helpers ────────────────────────────────────
-  function todayKey() {
-    return new Date().toISOString().slice(0, 10);
-  }
+  const STORAGE_KEY = 'winlog_priyanka_v1';
 
-  function storageKey() { return 'grazingWins_v1'; }
-
-  async function loadAll() {
+  // ── localStorage (works on GitHub Pages) ──────────────
+  function loadAll() {
     try {
-      const res = await window.storage.get(storageKey());
-      if (res && res.value) allData = JSON.parse(res.value);
+      const raw = localStorage.getItem(STORAGE_KEY);
+      allData = raw ? JSON.parse(raw) : {};
     } catch(e) { allData = {}; }
   }
 
-  async function saveAll() {
+  function saveAll() {
     try {
-      await window.storage.set(storageKey(), JSON.stringify(allData));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
     } catch(e) { console.error('Storage error', e); }
   }
 
   // ── Date helpers ───────────────────────────────────────
+  function todayKey() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
   function parseDate(key) {
     const [y, m, d] = key.split('-').map(Number);
     return new Date(y, m - 1, d);
   }
 
   function formatKey(date) {
-    return date.toISOString().slice(0, 10);
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
 
   function formatDisplay(key) {
@@ -647,10 +617,13 @@
     const { main, sub } = formatDisplay(selectedDate);
     document.getElementById('dateMain').textContent = main;
     document.getElementById('dateSub').textContent = sub;
-    // Disable next if today
     const nextBtn = document.getElementById('nextDay');
-    nextBtn.style.opacity = selectedDate >= todayKey() ? '0.3' : '1';
-    nextBtn.disabled = selectedDate >= todayKey();
+    const isToday = selectedDate >= todayKey();
+    nextBtn.style.opacity = isToday ? '0.3' : '1';
+    nextBtn.disabled = isToday;
+
+    const label = selectedDate === todayKey() ? "Today's Log" : formatDisplay(selectedDate).main + " Log";
+    document.getElementById('entriesLabel').textContent = label;
   }
 
   function renderCalStrip() {
@@ -683,7 +656,6 @@
       el.addEventListener('click', () => { selectedDate = key; render(); });
       strip.appendChild(el);
     }
-    // Scroll to end
     strip.scrollLeft = strip.scrollWidth;
   }
 
@@ -717,7 +689,7 @@
       const realIdx = (allData[selectedDate] || []).length - 1 - idx;
       const icons = { win: '💪', slip: '⚡', strong: '🏆', aware: '🧠' };
       const labels = { win: 'Resisted', slip: 'Slipped — caught it', strong: 'Major Win', aware: 'Awareness' };
-      const cardClass = (entry.type === 'slip') ? 'slip' : 'win';
+      const cardClass = entry.type === 'slip' ? 'slip' : 'win';
 
       const card = document.createElement('div');
       card.className = `entry-card ${cardClass}`;
@@ -737,11 +709,11 @@
     });
 
     list.querySelectorAll('.entry-delete').forEach(btn => {
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', () => {
         const i = parseInt(btn.dataset.idx);
         allData[selectedDate].splice(i, 1);
         if (allData[selectedDate].length === 0) delete allData[selectedDate];
-        await saveAll();
+        saveAll();
         render();
       });
     });
@@ -787,7 +759,7 @@
   });
 
   // ── Save ───────────────────────────────────────────────
-  document.getElementById('saveBtn').addEventListener('click', async () => {
+  document.getElementById('saveBtn').addEventListener('click', () => {
     const note = document.getElementById('noteInput').value.trim();
     const now = new Date();
     const time = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
@@ -800,16 +772,24 @@
       ts: now.getTime()
     };
 
-    if (!allData[selectedDate]) allData[selectedDate] = [];
-    allData[selectedDate].push(entry);
-    await saveAll();
+    // Always save to today's date
+    const key = todayKey();
+    if (!allData[key]) allData[key] = [];
+    allData[key].push(entry);
+    saveAll();
+
+    // Jump to today to show new entry
+    selectedDate = key;
 
     // Reset form
     document.getElementById('noteInput').value = '';
     selectedTrigger = null;
     document.querySelectorAll('.trigger-chip').forEach(c => c.classList.remove('active'));
 
-    showToast(selectedType === 'strong' ? '🏆 Major win logged!' : selectedType === 'slip' ? '⚡ Logged — awareness is progress' : '💪 Win logged!', selectedType === 'strong');
+    const msg = selectedType === 'strong' ? '🏆 Major win logged!'
+               : selectedType === 'slip'   ? '⚡ Logged — awareness is progress'
+               : '💪 Win logged!';
+    showToast(msg, selectedType === 'strong');
     render();
   });
 
@@ -831,11 +811,11 @@
     render();
   });
 
-  document.getElementById('clearDayBtn').addEventListener('click', async () => {
+  document.getElementById('clearDayBtn').addEventListener('click', () => {
     if (!allData[selectedDate] || allData[selectedDate].length === 0) return;
     if (confirm('Clear all entries for this day?')) {
       delete allData[selectedDate];
-      await saveAll();
+      saveAll();
       render();
       showToast('Day cleared');
     }
@@ -850,7 +830,8 @@
   }
 
   // ── Init ───────────────────────────────────────────────
-  loadAll().then(render);
+  loadAll();
+  render();
 </script>
 </body>
 </html>
